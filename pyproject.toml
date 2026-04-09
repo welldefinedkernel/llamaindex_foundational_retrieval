@@ -1,0 +1,24 @@
+[project]
+name = "llamaindex-foundational-retrieval"
+version = "0.1.0"
+description = "Local knowledge RAG-based system that uses Small-to-Big retrieval"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "datasets>=4.8.4",
+    "huggingface-hub>=1.10.0",
+    "llama-index>=0.14.20",
+]
+
+[dependency-groups]
+dev = [
+    "commitizen>=3.29.0",
+]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version_provider = "pep621"
+tag_format = "v$version"
+update_changelog_on_bump = true
+major_version_zero = true
+bump_message = "bump: version $current_version -> $new_version [skip ci]"
