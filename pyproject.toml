@@ -8,6 +8,7 @@ dependencies = [
     "datasets>=4.8.4",
     "deepeval>=3.9.6",
     "huggingface-hub>=1.10.0",
+    "ipywidgets",
     "llama-index>=0.14.20",
     "llama-index-readers-huggingface-fs>=0.5.0",
 ]
@@ -16,6 +17,9 @@ dependencies = [
 dev = [
     "commitizen>=3.29.0",
 ]
+
+[tool.setuptools]
+packages = ["pipeline", "data", "models"]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
