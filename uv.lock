@@ -1055,7 +1055,7 @@ wheels = [
 [[package]]
 name = "llamaindex-foundational-retrieval"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "datasets" },
     { name = "deepeval" },
@@ -1075,7 +1075,7 @@ requires-dist = [
     { name = "datasets", specifier = ">=4.8.4" },
     { name = "deepeval", specifier = ">=3.9.6" },
     { name = "huggingface-hub", specifier = ">=1.10.0" },
-    { name = "ipywidgets", specifier = ">=8.1.8" },
+    { name = "ipywidgets" },
     { name = "llama-index", specifier = ">=0.14.20" },
     { name = "llama-index-readers-huggingface-fs", specifier = ">=0.5.0" },
 ]
