@@ -7,7 +7,7 @@ name = "llamaindex-foundational-retrieval"
 version = "0.1.0"
 description = "Local knowledge RAG-based system that uses Small-to-Big retrieval"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13,<3.14"
 dependencies = [
     "datasets>=4.8.4",
     "deepeval>=3.9.6",
@@ -15,7 +15,16 @@ dependencies = [
     "ipywidgets",
     "llama-index>=0.14.20",
     "llama-index-readers-huggingface-fs>=0.5.0",
+    "ipykernel",
+    "setuptools>=82.0.1",
+    "milvus-lite==2.5.2rc1",
+    "pip>=26.0.1",
+    "pymilvus>=2.6.12",
+    "sentence-transformers>=5.4.1",
 ]
+
+[tool.uv]
+environments = ["sys_platform == 'linux'"]
 
 [dependency-groups]
 dev = [
