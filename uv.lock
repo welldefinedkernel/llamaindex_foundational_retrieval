@@ -965,6 +965,7 @@ dependencies = [
     { name = "pymilvus", marker = "sys_platform == 'linux'" },
     { name = "sentence-transformers", marker = "sys_platform == 'linux'" },
     { name = "setuptools", marker = "sys_platform == 'linux'" },
+    { name = "tqdm", marker = "sys_platform == 'linux'" },
 ]
 
 [package.dev-dependencies]
@@ -986,6 +987,7 @@ requires-dist = [
     { name = "pymilvus", specifier = ">=2.6.12" },
     { name = "sentence-transformers", specifier = ">=5.4.1" },
     { name = "setuptools", specifier = ">=82.0.1" },
+    { name = "tqdm", specifier = ">=4.67.3" },
 ]
 
 [package.metadata.requires-dev]

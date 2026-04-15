@@ -21,6 +21,7 @@ dependencies = [
     "pip>=26.0.1",
     "pymilvus>=2.6.12",
     "sentence-transformers>=5.4.1",
+    "tqdm>=4.67.3",
 ]
 
 [tool.uv]
