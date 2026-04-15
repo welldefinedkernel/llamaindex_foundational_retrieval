@@ -11,3 +11,12 @@ def create_local_milvus_client(db_name: str) -> MilvusClient:
         db_name = f"./{db_name}"
     client = MilvusClient(uri=db_name)
     return client
+
+def create_milvus_collection(client: MilvusClient, collection_name: str, dimension: int):
+    if client.has_collection(collection_name=collection_name):
+        client.drop_collection(collection_name=collection_name)
+    client.create_collection(
+        collection_name=collection_name,
+        dimension=dimension,
+    )
+    print(f"Collection '{collection_name}' created with dimension {dimension}.")
