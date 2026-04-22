@@ -25,6 +25,7 @@ dependencies = [
     "llama-index-embeddings-huggingface>=0.7.0",
     "llama-index-vector-stores-milvus>=1.1.0",
     "transformers>=5.5.4",
+    "numpy>=2.4.4",
 ]
 
 [tool.uv]
