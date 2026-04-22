@@ -14,8 +14,8 @@ def create_vector_store(db_name: str, collection_name: str, embedding_dim: int) 
         uri=db_path, 
         collection_name=collection_name,
         dim=embedding_dim,               # Must match your HF model dimension (e.g., BGE-small is 384)
-        overwrite=False,
-        similarity_metric="COSINE"
+        overwrite=True,
+        similarity_metric="COSINE",
     )
     return vector_store
 
