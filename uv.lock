@@ -882,6 +882,20 @@ wheels = [
 ]
 
 [[package]]
+name = "llama-index-embeddings-huggingface"
+version = "0.7.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "huggingface-hub", marker = "sys_platform == 'linux'" },
+    { name = "llama-index-core", marker = "sys_platform == 'linux'" },
+    { name = "sentence-transformers", marker = "sys_platform == 'linux'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a1/b3/faa44f7c9edaaefb6f7e1d8a306433c4ccc5ea5bde92302bec149e62b838/llama_index_embeddings_huggingface-0.7.0.tar.gz", hash = "sha256:da8a2a65df9404112c4430dfada09d4f846ba165197a25dbe77f734014c56a87", size = 8692, upload-time = "2026-03-12T20:20:31.588Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/25/86/dc43deab70f19db4fcdd82337e18b7f5b828478c486d6308cea10def87c5/llama_index_embeddings_huggingface-0.7.0-py3-none-any.whl", hash = "sha256:cae7e4ffddc1fecb34b83425a00679f338ce03ad0a7f3aca6b927136d6af7131", size = 8904, upload-time = "2026-03-12T20:20:32.449Z" },
+]
+
+[[package]]
 name = "llama-index-embeddings-openai"
 version = "0.6.0"
 source = { registry = "https://pypi.org/simple" }
@@ -935,6 +949,19 @@ wheels = [
 ]
 
 [[package]]
+name = "llama-index-vector-stores-milvus"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "llama-index-core", marker = "sys_platform == 'linux'" },
+    { name = "pymilvus", extra = ["milvus-lite"], marker = "sys_platform == 'linux'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/75/84/d9a55fc0d956770925f40bdbff32839548cfcf62f5da690f975dbdd95cbd/llama_index_vector_stores_milvus-1.1.0.tar.gz", hash = "sha256:c687a5abdfc8105279e3556cdb68ba760e8c5b12f257610286ce8e4073e1309c", size = 15844, upload-time = "2026-03-12T20:47:25.787Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a4/5b/e6b77d74b4ab4a262a76de0c13e333c0f2fadf83adb6b8dfbd6f2e966e50/llama_index_vector_stores_milvus-1.1.0-py3-none-any.whl", hash = "sha256:a4ecd1736e0fe073f800b0bbcceade48ba96820f7b3c2b4f513b6d50ed1cc6f6", size = 16061, upload-time = "2026-03-12T20:47:24.83Z" },
+]
+
+[[package]]
 name = "llama-index-workflows"
 version = "2.17.3"
 source = { registry = "https://pypi.org/simple" }
@@ -959,13 +986,16 @@ dependencies = [
     { name = "ipykernel", marker = "sys_platform == 'linux'" },
     { name = "ipywidgets", marker = "sys_platform == 'linux'" },
     { name = "llama-index", marker = "sys_platform == 'linux'" },
+    { name = "llama-index-embeddings-huggingface", marker = "sys_platform == 'linux'" },
     { name = "llama-index-readers-huggingface-fs", marker = "sys_platform == 'linux'" },
+    { name = "llama-index-vector-stores-milvus", marker = "sys_platform == 'linux'" },
     { name = "milvus-lite", marker = "sys_platform == 'linux'" },
     { name = "pip", marker = "sys_platform == 'linux'" },
     { name = "pymilvus", marker = "sys_platform == 'linux'" },
     { name = "sentence-transformers", marker = "sys_platform == 'linux'" },
     { name = "setuptools", marker = "sys_platform == 'linux'" },
     { name = "tqdm", marker = "sys_platform == 'linux'" },
+    { name = "transformers", marker = "sys_platform == 'linux'" },
 ]
 
 [package.dev-dependencies]
@@ -981,13 +1011,16 @@ requires-dist = [
     { name = "ipykernel" },
     { name = "ipywidgets" },
     { name = "llama-index", specifier = ">=0.14.20" },
+    { name = "llama-index-embeddings-huggingface", specifier = ">=0.7.0" },
     { name = "llama-index-readers-huggingface-fs", specifier = ">=0.5.0" },
+    { name = "llama-index-vector-stores-milvus", specifier = ">=1.1.0" },
     { name = "milvus-lite", specifier = "==2.5.2rc1" },
     { name = "pip", specifier = ">=26.0.1" },
     { name = "pymilvus", specifier = ">=2.6.12" },
     { name = "sentence-transformers", specifier = ">=5.4.1" },
     { name = "setuptools", specifier = ">=82.0.1" },
     { name = "tqdm", specifier = ">=4.67.3" },
+    { name = "transformers", specifier = ">=5.5.4" },
 ]
 
 [package.metadata.requires-dev]
@@ -1713,6 +1746,11 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/2c/d7/c5d1381248a33975ccc864a0f980f93270ecc35354de8646c8a16443cccb/pymilvus-2.6.12.tar.gz", hash = "sha256:8323e990dc305e607fef525498eb779e42940a69e0691dde009cd02d48845f7a", size = 1584521, upload-time = "2026-04-09T07:49:11.374Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ce/5d/44b0fa94c91503381e6f12298277f84f8e7b0bb00715ab89fc273c4d681e/pymilvus-2.6.12-py3-none-any.whl", hash = "sha256:69051b8b62712f157b2b50aeb7bde7fd7cdb5940aac0122094eb3cd58bc20f0d", size = 315183, upload-time = "2026-04-09T07:49:09.013Z" },
+]
+
+[package.optional-dependencies]
+milvus-lite = [
+    { name = "milvus-lite", marker = "sys_platform == 'linux'" },
 ]
 
 [[package]]
