@@ -1,8 +1,18 @@
-from sentence_transformers import SentenceTransformer
+import json
+
+from huggingface_hub import hf_hub_download
+
 
 def get_available_prompts(model_name):
-    model = SentenceTransformer(model_name, model_kwargs={"dtype": "auto"})
+    """Read prompt config from the Hub without downloading model weights."""
+    config_path = hf_hub_download(
+        repo_id=model_name,
+        filename="config_sentence_transformers.json",
+    )
+    with open(config_path, "r") as f:
+        cfg = json.load(f)
 
-    print(model.prompts)               
-    print(list(model.prompts.keys()))  
-    print(model.default_prompt_name)  
+    prompts = cfg.get("prompts", {}) or {}
+    print(prompts)
+    print(list(prompts.keys()))
+    print(cfg.get("default_prompt_name"))
