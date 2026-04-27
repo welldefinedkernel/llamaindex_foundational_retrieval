@@ -3,7 +3,7 @@ import json
 from huggingface_hub import hf_hub_download
 
 
-def get_available_prompts(model_name):
+def get_available_prompts(model_name: str) -> dict:
     """Read prompt config from the Hub without downloading model weights."""
     config_path = hf_hub_download(
         repo_id=model_name,
@@ -15,4 +15,4 @@ def get_available_prompts(model_name):
     prompts = cfg.get("prompts", {}) or {}
     print(prompts)
     print(list(prompts.keys()))
-    print(cfg.get("default_prompt_name"))
+    return prompts
