@@ -1,6 +1,6 @@
 import os
 
-from llama_index.core import VectorStoreIndex, StorageContext, Settings
+from llama_index.core import VectorStoreIndex, StorageContext
 from llama_index.core.schema import BaseNode
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.vector_stores.milvus import MilvusVectorStore
@@ -16,6 +16,17 @@ def create_vector_store(db_name: str, collection_name: str, embedding_dim: int) 
         collection_name=collection_name,
         dim=embedding_dim,               # Must match your HF model dimension (e.g., BGE-small is 384)
         overwrite=True,
+        similarity_metric="COSINE",
+    )
+    return vector_store
+
+def load_vector_store(db_name: str, collection_name: str) -> MilvusVectorStore:
+    db_path = os.path.abspath(db_name)
+    vector_store = MilvusVectorStore(
+        uri=db_path, 
+        collection_name=collection_name,
+        dim=None,  # Dimension is not needed for loading an existing store
+        overwrite=False,
         similarity_metric="COSINE",
     )
     return vector_store
