@@ -4,6 +4,7 @@ from llama_index.core import VectorStoreIndex, StorageContext, Settings
 from llama_index.core.schema import BaseNode
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.vector_stores.milvus import MilvusVectorStore
+from models.embedder import Embedder
 
 
 def create_vector_store(db_name: str, collection_name: str, embedding_dim: int) -> MilvusVectorStore:
@@ -22,7 +23,7 @@ def create_vector_store(db_name: str, collection_name: str, embedding_dim: int) 
 def create_index_from_embedded_chunks(
         vector_store: MilvusVectorStore,
         embedded_chunks: list[BaseNode],
-        embed_model: str,
+        embed_model: Embedder,
     ) -> VectorStoreIndex:
     assert len(embedded_chunks) > 0, "No embedded chunks provided to create the index."
     assert all(hasattr(chunk, "embedding") and chunk.embedding is not None for chunk in embedded_chunks), "All chunks must have embeddings before creating the index."
@@ -33,7 +34,7 @@ def create_index_from_embedded_chunks(
         nodes=embedded_chunks, 
         storage_context=storage_context,
         show_progress=True,
-        embed_model=HuggingFaceEmbedding(model_name=embed_model),
+        embed_model=HuggingFaceEmbedding(model_name=embed_model.model_id),
     )
     
     return index

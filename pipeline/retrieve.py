@@ -1,16 +1,15 @@
-from llama_index.core.schema import NodeWithScore
 from llama_index.core.vector_stores.types import VectorStoreQuery, VectorStoreQueryResult
 from llama_index.vector_stores.milvus import MilvusVectorStore
+from models.embedder import Embedder
 from sentence_transformers import SentenceTransformer
 
-def embed_query(query: str, embed_model: str) -> list[float]:
-    model = SentenceTransformer(embed_model, model_kwargs={"dtype": "auto"})
-    return model.encode(query, prompt_name="web_search_query").tolist()
+def embed_query(query: str, embed_model: Embedder) -> list[float]:
+    return embed_model.model.encode(query, prompt_name="web_search_query").tolist()
     
 def retrieve_relevant_chunks(
         query: str, 
         vector_store: MilvusVectorStore,
-        embed_model: str,
+        embed_model: Embedder,
         top_k: int = 5, 
     ) -> VectorStoreQueryResult:
     query_embedding = embed_query(query, embed_model)
