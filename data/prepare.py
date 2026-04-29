@@ -1,8 +1,13 @@
 from datasets import load_dataset
-from llama_index.core import Document
+from llama_index.core import Document, SimpleDirectoryReader
 from typing import Any, cast
 
-def create_dataset_from_hf(dataset_name: str, subset_name: str, split: str):
+
+def create_dataset_from_directory(directory: str) -> list[Document]:
+    reader = SimpleDirectoryReader(input_dir=directory, recursive=True)
+    return reader.load_data(show_progress=True)
+
+def create_dataset_from_hf(dataset_name: str, subset_name: str, split: str) -> list[Document]:
     dataset = load_dataset(dataset_name, subset_name, split=split)
     seen = set()
     documents = []

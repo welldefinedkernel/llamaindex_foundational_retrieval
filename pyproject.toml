@@ -26,6 +26,8 @@ dependencies = [
     "llama-index-vector-stores-milvus>=1.1.0",
     "transformers>=5.5.4",
     "numpy>=2.4.4",
+    "docx2txt>=0.9",
+    "llama-index-readers-file>=0.6.0",
 ]
 
 [tool.uv]
