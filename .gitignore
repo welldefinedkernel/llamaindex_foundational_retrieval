@@ -7,10 +7,13 @@ wheels/
 *.egg-info
 
 # DeepEval
-.deep_eval/
+.deepeval/
 
 # Virtual environments
 .venv/
 
 # Local experiments
 experiments/
+
+# Config
+.env*
