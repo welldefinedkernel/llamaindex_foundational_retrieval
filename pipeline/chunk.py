@@ -13,5 +13,10 @@ def chunk_documents(documents, embed_model: Embedder, chunk_size=512, chunk_over
 
 def embed_chunks(chunks: list, embed_model: Embedder):
     for chunk in tqdm(chunks):
-        chunk.embedding = embed_model.model.encode(chunk.get_content(), prompt_name="document")
+        chunk.embedding = embed_model.model.encode(
+            chunk.get_content(), 
+            prompt_name="document", 
+            show_progress_bar=False,
+            normalize_embeddings=True
+        )
     return chunks
