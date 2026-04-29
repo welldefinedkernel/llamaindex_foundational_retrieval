@@ -7,9 +7,10 @@ from llama_index.vector_stores.milvus import MilvusVectorStore
 from models.embedder import Embedder
 
 
-def create_vector_store(db_name: str, collection_name: str, embedding_dim: int) -> MilvusVectorStore:
-    db_path = os.path.abspath(db_name)
-    os.makedirs(os.path.dirname(db_path), exist_ok=True)
+def create_vector_store(db_path: str, collection_name: str, embedding_dim: int) -> MilvusVectorStore:
+    if not db_path.startswith("http://") and not db_path.startswith("https://"):
+        db_path = os.path.abspath(db_path)
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
 
     vector_store = MilvusVectorStore(
         uri=db_path, 
@@ -20,8 +21,10 @@ def create_vector_store(db_name: str, collection_name: str, embedding_dim: int) 
     )
     return vector_store
 
-def load_vector_store(db_name: str, collection_name: str) -> MilvusVectorStore:
-    db_path = os.path.abspath(db_name)
+def load_vector_store(db_path: str, collection_name: str) -> MilvusVectorStore:
+    if not db_path.startswith("http://") and not db_path.startswith("https://"):
+        db_path = os.path.abspath(db_path)
+        
     vector_store = MilvusVectorStore(
         uri=db_path, 
         collection_name=collection_name,
@@ -44,7 +47,7 @@ def create_index_from_embedded_chunks(
     index = VectorStoreIndex(
         nodes=embedded_chunks, 
         storage_context=storage_context,
-        show_progress=True,
+        show_progress=False,
         embed_model=HuggingFaceEmbedding(model_name=embed_model.model_id),
     )
     
