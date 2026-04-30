@@ -17,3 +17,6 @@ experiments/
 
 # Config
 .env*
+
+# Vector store
+.milvus
