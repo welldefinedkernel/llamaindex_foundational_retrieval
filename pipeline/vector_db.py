@@ -7,7 +7,12 @@ from llama_index.vector_stores.milvus import MilvusVectorStore
 from models.embedder import Embedder
 
 
-def create_vector_store(db_path: str, collection_name: str, embedding_dim: int) -> MilvusVectorStore:
+def create_vector_store(
+    db_path: str,
+    collection_name: str,
+    embedding_dim: int,
+    overwrite: bool = False,
+) -> MilvusVectorStore:
     if not db_path.startswith("http://") and not db_path.startswith("https://"):
         db_path = os.path.abspath(db_path)
         os.makedirs(os.path.dirname(db_path), exist_ok=True)
@@ -16,7 +21,7 @@ def create_vector_store(db_path: str, collection_name: str, embedding_dim: int) 
         uri=db_path, 
         collection_name=collection_name,
         dim=embedding_dim,               # Must match your HF model dimension (e.g., BGE-small is 384)
-        overwrite=True,
+        overwrite=overwrite,
         similarity_metric="COSINE",
     )
     return vector_store
