@@ -43,7 +43,7 @@ dev = [
 ]
 
 [tool.setuptools]
-packages = ["pipeline", "data", "models"]
+packages = ["data", "evaluation", "models", "pipeline"]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
