@@ -7,13 +7,14 @@ load_dotenv()
 
 def create_synthetic_dataset(
         docs_dir: str, 
-        output_dir: str, 
+        output_file: str,  
         max_contexts_per_document:int = 3,
         max_goldens_per_context: int = 2
-    ) -> None:
+    ) -> str:
     
-    docs_path = Path(docs_dir).resolve()
-    output_path = Path(output_dir).resolve()
+    project_root = Path(__file__).resolve().parent.parent
+    docs_path = Path(docs_dir) if Path(docs_dir).is_absolute() else project_root / docs_dir
+    output_path = Path(output_file) if Path(output_file).is_absolute() else project_root / output_file
 
     document_paths = [str(p) for p in docs_path.glob("*.docx")]
     if not document_paths:
@@ -33,8 +34,10 @@ def create_synthetic_dataset(
     )
     synthesizer.save_as(
         file_type="json",
-        directory=str(output_path),
-        file_name="applets_4_0_synthetic",
+        directory=str(output_path.parent),
+        file_name=output_path.stem,
     )
 
     print(f"DeepEval synthesis cost: ${synthesizer.synthesis_cost:.6f}")
+
+    return str(output_path)
