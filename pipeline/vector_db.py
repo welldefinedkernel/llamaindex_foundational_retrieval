@@ -41,8 +41,7 @@ def load_vector_store(db_path: str, collection_name: str) -> MilvusVectorStore:
 
 def create_index_from_embedded_chunks(
         vector_store: MilvusVectorStore,
-        embedded_chunks: list[BaseNode],
-        embed_model: Embedder,
+        embedded_chunks: list[BaseNode]
     ) -> VectorStoreIndex:
     assert len(embedded_chunks) > 0, "No embedded chunks provided to create the index."
     assert all(hasattr(chunk, "embedding") and chunk.embedding is not None for chunk in embedded_chunks), "All chunks must have embeddings before creating the index."
@@ -53,7 +52,7 @@ def create_index_from_embedded_chunks(
         nodes=embedded_chunks, 
         storage_context=storage_context,
         show_progress=False,
-        embed_model=HuggingFaceEmbedding(model_name=embed_model.model_id),
+        embed_model=None,
     )
     
     return index
