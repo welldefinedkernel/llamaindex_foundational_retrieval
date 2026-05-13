@@ -8,7 +8,11 @@ class Retriever:
         self.vector_store = vector_store
 
     def _embed_query(self, query: str) -> list[float]:
-        return self.embed_model.model.encode(query, prompt_name="web_search_query").tolist()
+        return self.embed_model.model.encode(
+            query, 
+            prompt_name="web_search_query",
+            normalize_embeddings=True
+        ).tolist()
 
     def retrieve_relevant_chunks(self, query: str, top_k: int = 5) -> list[str]:
         query_embedding = self._embed_query(query)
