@@ -13,6 +13,4 @@ def get_available_prompts(model_name: str) -> dict:
         cfg = json.load(f)
 
     prompts = cfg.get("prompts", {}) or {}
-    print(prompts)
-    print(list(prompts.keys()))
     return prompts
