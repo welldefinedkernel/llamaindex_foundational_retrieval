@@ -9,7 +9,14 @@ def chunk_documents(documents, embed_model: Embedder, chunk_size=512, chunk_over
         tokenizer=embed_model.tokenizer.tokenize,
     )
     nodes = splitter.get_nodes_from_documents(documents)
-    return nodes
+    seen = set()
+    unique_nodes = []
+    for node in nodes:
+        content = node.get_content()
+        if content not in seen:
+            seen.add(content)
+            unique_nodes.append(node)
+    return unique_nodes
 
 def embed_chunks(chunks: list, embed_model: Embedder):
     for chunk in tqdm(chunks):
