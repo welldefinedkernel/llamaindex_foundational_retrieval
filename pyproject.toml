@@ -34,6 +34,9 @@ dependencies = [
     "langchain-community>=0.4.1",
     "ollama>=0.6.2",
     "dotenv>=0.9.9",
+    "unstructured[all-docs]>=0.17.0",
+    "docling>=2.94.0",
+    "mcp>=1.27.1",
 ]
 
 [tool.uv]
