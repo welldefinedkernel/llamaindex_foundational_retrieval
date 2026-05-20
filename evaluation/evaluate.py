@@ -1,4 +1,5 @@
 import json
+import re
 import numpy as np
 
 from collections.abc import Callable
@@ -113,10 +114,15 @@ def evaluate_retrieval_metrics(
 
     return evaluate(test_cases=test_cases, metrics=metrics)
 
-def chunk_overlap(retrieved_chunk: str, ground_truth_chunk: str, threshold=0.3) -> bool:
-    """Check if retrieved chunk overlaps with ground truth using token overlap."""
-    ret_tokens = set(retrieved_chunk.lower().split())
-    gt_tokens = set(ground_truth_chunk.lower().split())
+def _tokenize(text: str) -> set[str]:
+    """Lowercase and split into word tokens, stripping punctuation."""
+    return set(re.findall(r'\w+', text.lower()))
+
+
+def chunk_overlap_recall(retrieved_chunk: str, ground_truth_chunk: str, threshold=0.3) -> bool:
+    """Check if retrieved chunk covers the ground truth (normalize by GT length)."""
+    ret_tokens = _tokenize(retrieved_chunk)
+    gt_tokens = _tokenize(ground_truth_chunk)
     if not gt_tokens:
         return False
     overlap = len(ret_tokens & gt_tokens) / len(gt_tokens)
@@ -132,7 +138,7 @@ def evaluate_retrieval(
     
     This function uses automatic evaluation (token overlap checking) rather than 
     LLM-as-Judge. Retrieved chunks are compared against ground truth contexts 
-    using word-level overlap to compute recall, precision, MRR, and F1 scores.
+    using word-level overlap to compute recall and MRR scores.
     
     Args:
         data_path: Path to JSON dataset with 'input', 'context', and optionally 'retrieval_context' fields.
@@ -141,12 +147,11 @@ def evaluate_retrieval(
         threshold: Minimum overlap ratio (0-1) to consider chunks as matching.
     
     Returns:
-        Dictionary with 'recall', 'precision', 'mrr', 'f1' metrics.
+        Dictionary with 'recall', 'mrr' metrics.
     """
     samples = _load_json_dataset(data_path)
     
     recalls = []
-    precisions = []
     reciprocal_ranks = []
 
     for sample in samples:
@@ -159,43 +164,35 @@ def evaluate_retrieval(
         retrieved_chunks = retrieval_context_getter(query)[:k]
         
         if not retrieved_chunks:
+            recalls.append(0.0)
+            reciprocal_ranks.append(0.0)
             continue
         
-        # Compute recall: fraction of ground truth chunks that have overlap with retrieval
-        hits = sum(
-            1 for gt_chunk in gt_contexts
-            if any(chunk_overlap(ret, gt_chunk, threshold) for ret in retrieved_chunks)
-        )
-        recall = hits / len(gt_contexts) if gt_contexts else 0.0
+        # Recall: fraction of ground truth chunks covered by retrieval
+        hits = 0
+        for gt_chunk in gt_contexts:
+            for ret in retrieved_chunks:
+                if chunk_overlap_recall(ret, gt_chunk, threshold):
+                    hits += 1
+                    break
+        recall = hits / len(gt_contexts)
         
-        # Compute precision: fraction of retrieved chunks that match ground truth
-        relevant_retrieved = sum(
-            1 for ret in retrieved_chunks
-            if any(chunk_overlap(ret, gt_chunk, threshold) for gt_chunk in gt_contexts)
-        )
-        precision = relevant_retrieved / len(retrieved_chunks) if retrieved_chunks else 0.0
-        
-        # Compute reciprocal rank: 1/rank of first relevant chunk
+        # Reciprocal rank: 1/rank of first relevant chunk
         reciprocal_rank = 0.0
         for rank, ret in enumerate(retrieved_chunks, start=1):
-            if any(chunk_overlap(ret, gt_chunk, threshold) for gt_chunk in gt_contexts):
+            if any(chunk_overlap_recall(ret, gt_chunk, threshold) for gt_chunk in gt_contexts):
                 reciprocal_rank = 1.0 / rank
                 break
         
         recalls.append(recall)
-        precisions.append(precision)
         reciprocal_ranks.append(reciprocal_rank)
     
-    mean_recall = np.mean(recalls) if recalls else 0.0
-    mean_precision = np.mean(precisions) if precisions else 0.0
-    mean_reciprocal_rank = np.mean(reciprocal_ranks) if reciprocal_ranks else 0.0
-    f1 = 2 * mean_recall * mean_precision / (mean_recall + mean_precision + 1e-9)
+    mean_recall = float(np.mean(recalls)) if recalls else 0.0
+    mean_reciprocal_rank = float(np.mean(reciprocal_ranks)) if reciprocal_ranks else 0.0
     
     print(f"Automatic Metric Evaluation (Token Overlap, threshold={threshold})")
     print(f"Recall@{k}:    {mean_recall:.3f} (std: {np.std(recalls):.3f})" if recalls else f"Recall@{k}:    N/A")
-    print(f"Precision@{k}: {mean_precision:.3f} (std: {np.std(precisions):.3f})" if precisions else f"Precision@{k}: N/A")
     print(f"MRR@{k}:       {mean_reciprocal_rank:.3f} (std: {np.std(reciprocal_ranks):.3f})" if reciprocal_ranks else f"MRR@{k}:       N/A")
-    print(f"F1@{k}:        {f1:.3f}")
     if recalls:
         print(f"\nPer-query recall distribution (n={len(recalls)}):")
         print(f"  100% recall: {sum(1 for r in recalls if r == 1.0)}")
@@ -203,8 +200,6 @@ def evaluate_retrieval(
         print(f"  0% recall:   {sum(1 for r in recalls if r == 0.0)}")
 
     return {
-        "recall": float(mean_recall),
-        "precision": float(mean_precision),
-        "mrr": float(mean_reciprocal_rank),
-        "f1": float(f1),
+        "recall": mean_recall,
+        "mrr": mean_reciprocal_rank,
     }
